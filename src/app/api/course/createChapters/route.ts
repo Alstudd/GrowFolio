@@ -8,39 +8,60 @@ import { prisma } from "@/lib/db";
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
-    const { title, units } = createChaptersSchema.parse(body);
+    const { title, units = [] } = createChaptersSchema.parse(body);
 
-    console.log("logging the title and units", title, units);
+    console.log("Logging the title and units:", title, units);
 
-    type outputUnits = {
+    // Define a type for output units
+    type outputUnit = {
       title: string;
       chapters: {
         youtube_search_query: string;
         chapter_title: string;
       }[];
-    }[];
+    };
 
-    console.log("Logging the length of the units:", units.length);
+    let output_units: outputUnit[];
 
-    let output_units: outputUnits = await strict_output(
-      "You are an AI capable of curating course content, coming up with relevant chapter titles, and finding relevant youtube videos for each chapter",
-      `It is your job to create a course about ${title}. The user has requested to create chapters for each of the units. Then, for each chapter, provide a detailed youtube search query that can be used to find an informative educational video for each chapter. Each query should give an educational informative course in youtube.`,
-      {
-        title: "string",
-        chapters: {
-          youtube_search_query: "string",
-          chapter_title: "string",
-        },
-      }
-    );
-
-    // Ensure output_units is always an array
-    if (!Array.isArray(output_units)) {
-      output_units = [output_units];
+    if (units.length > 0) {
+      // Generate course content for each unit provided by the user
+      output_units = await Promise.all(
+        units.map(async (unit) => {
+          return await strict_output(
+            "You are an AI capable of curating course content...",
+            `It is your job to create a unit about ${unit} for the course titled ${title}. Provide chapter titles and relevant YouTube search queries.`,
+            {
+              title: "string",
+              chapters: {
+                youtube_search_query: "string",
+                chapter_title: "string",
+              },
+            }
+          );
+        })
+      );
+    } else {
+      // Generate content for a single default unit
+      const defaultUnit = await strict_output(
+        "You are an AI capable of curating course content...",
+        `It is your job to create a single unit for the course titled ${title}. Provide chapter titles and relevant YouTube search queries.`,
+        {
+          title: "string",
+          chapters: {
+            youtube_search_query: "string",
+            chapter_title: "string",
+          },
+        }
+      );
+      output_units = [defaultUnit];
     }
 
-    // Validate the structure of output_units
-    if (!output_units || output_units.length === 0) {
+    // Ensure output_units is always an array with valid structure
+    output_units = output_units.filter(
+      (unit) => unit && unit.title && Array.isArray(unit.chapters)
+    );
+
+    if (output_units.length === 0) {
       return NextResponse.json(
         { error: "Failed to generate course content" },
         { status: 500 }
@@ -48,8 +69,8 @@ export async function POST(req: Request, res: Response) {
     }
 
     const imageSearchTerm = await strict_output(
-      "you are an AI capable of finding the most relevant image for a course",
-      `Please provide a good image search term for the title of a course about ${title}. This search term will be fed into the unsplash API, so make sure it is a good search term that will return good results`,
+      "You are an AI capable of finding the most relevant image...",
+      `Provide a good image search term for a course titled ${title}.`,
       {
         image_search_term: "string",
       }
@@ -82,11 +103,6 @@ export async function POST(req: Request, res: Response) {
 
     try {
       for (const unit of output_units) {
-        if (!unit.title || !Array.isArray(unit.chapters)) {
-          console.error("Invalid unit structure:", unit);
-          continue;
-        }
-
         const prismaUnit = await prisma.unit.create({
           data: {
             name: unit.title,
@@ -103,15 +119,10 @@ export async function POST(req: Request, res: Response) {
             })),
           });
         }
-
-        console.log("Created unit:", prismaUnit);
       }
     } catch (error) {
       console.error("Error creating units and chapters:", error);
-      // Attempt to clean up the course if unit creation fails
-      await prisma.course.delete({
-        where: { id: course.id },
-      });
+      await prisma.course.delete({ where: { id: course.id } });
       return NextResponse.json(
         { error: "Failed to create course structure" },
         { status: 500 }
