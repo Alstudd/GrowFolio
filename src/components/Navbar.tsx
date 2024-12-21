@@ -1,24 +1,12 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
-import { Button } from "./ui/button";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
 import { ThemeToggle } from "./ThemeToggle";
 import UserAccountNav from "./UserAccountNav";
 import { getAuthSession } from "@/lib/nextauth";
+import SignInButton from "./SignInButton";
 
-const Navbar = () => {
-  const [session, setSession] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchSession = async () => {
-      const sessionData = await getAuthSession();
-      setSession(sessionData);
-    };
-
-    fetchSession().catch(console.error);
-  }, []);
+const Navbar = async () => {
+  const session = await getAuthSession();
 
   return (
     <div>
@@ -53,19 +41,12 @@ const Navbar = () => {
           </a>
           <div>
             <div className="md:mx-8 bg-white dark:bg-black" id="navbar-default">
-              <div className="flex gap-5">
+              <div className="flex items-center gap-5">
                 <ThemeToggle />
                 {session?.user ? (
-                  <UserAccountNav user={session.user} />
+                  <UserAccountNav user={session?.user} />
                 ) : (
-                  <Button
-                    onClick={() => {
-                      signIn("google").catch(console.error);
-                    }}
-                    className="md:block hidden"
-                  >
-                    Login
-                  </Button>
+                  <SignInButton text={"Sign In"} />
                 )}
               </div>
             </div>

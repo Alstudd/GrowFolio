@@ -5,83 +5,96 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { IconCloud } from "@/components/ui/IconCloud";
 import { ConfettiButton } from "@/components/ui/Confetti";
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 
 const slugs = [
-  "typescript",
-  "javascript",
-  "dart",
-  "java",
-  "react",
-  "flutter",
-  "android",
-  "html5",
-  "css3",
-  "nodedotjs",
-  "express",
-  "nextdotjs",
-  "prisma",
-  "amazonaws",
-  "postgresql",
-  "firebase",
-  "nginx",
-  "vercel",
-  "testinglibrary",
-  "jest",
-  "cypress",
-  "docker",
-  "git",
-  "jira",
-  "github",
-  "gitlab",
-  "visualstudiocode",
-  "androidstudio",
-  "sonarqube",
-  "figma",
+  "paypal",
+  "visa",
+  "mastercard",
+  "stripe",
+  "americanexpress",
+  "coinbase",
+  "binance",
+  "blockchain",
+  "ethereum",
+  "bitcoin",
+  "tether",
+  "square",
+  "revolut",
+  "robinhood",
+  "cashapp",
+  "yahoo",
+  "bankofamerica",
+  "goldmansachs",
+  "jp-morgan",
+  "hsbc",
+  "citibank",
+  "wellsfargo",
+  "fidelity",
+  "schwab",
+  "vanguard",
+  "blackrock",
+  "intuit",
+  "adp",
+  "braintree",
+  "klarna",
+  "afterpay",
+  "zelle",
+  "monzo",
+  "sofi",
+  "transferwise",
+  "alipay",
+  "wechat",
+  "squareenix",
+  "venmo",
 ];
 
 export function HeroScrollDemo() {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   interface Item {
-    id: string
-    title: string
-    subtitle: string
-    content: string
-    gridArea: string
+    id: string;
+    title: string;
+    subtitle: string;
+    content: string;
+    gridArea: string;
   }
-  
+
   const items: Item[] = [
-    { 
-      id: '1', 
-      title: 'Quiz Generator', 
-      subtitle: 'Generate interactive quizzes', 
-      content: 'Create quizzes that test user knowledge with multiple question types and grading options.', 
-      gridArea: '1 / 1 / 2 / 2' 
+    {
+      id: "1",
+      title: "Quiz Generator",
+      subtitle: "Generate interactive quizzes",
+      content:
+        "Create quizzes that test user knowledge with multiple question types and grading options.",
+      gridArea: "1 / 1 / 2 / 2",
     },
-    { 
-      id: '2', 
-      title: 'Course Generator', 
-      subtitle: 'Create and manage courses', 
-      content: 'Design educational courses with structured lessons, modules, and assessments to enhance learning.', 
-      gridArea: '1 / 2 / 2 / 4' 
+    {
+      id: "2",
+      title: "Course Generator",
+      subtitle: "Create and manage courses",
+      content:
+        "Design educational courses with structured lessons, modules, and assessments to enhance learning.",
+      gridArea: "1 / 2 / 2 / 4",
     },
-    { 
-      id: '3', 
-      title: 'RoadMap Brainstorming', 
-      subtitle: 'Plan and brainstorm your roadmap', 
-      content: 'Collaboratively create and brainstorm project roadmaps, allowing for milestone tracking and team input.', 
-      gridArea: '2 / 1 / 4 / 2' 
+    {
+      id: "3",
+      title: "RoadMap Brainstorming",
+      subtitle: "Plan and brainstorm your roadmap",
+      content:
+        "Collaboratively create and brainstorm project roadmaps, allowing for milestone tracking and team input.",
+      gridArea: "2 / 1 / 4 / 2",
     },
-    { 
-      id: '4', 
-      title: 'Customized Personal Chatbot', 
-      subtitle: 'Build your own chatbot', 
-      content: 'Develop personalized AI chatbots tailored to specific needs, offering customizable conversations and responses.', 
-      gridArea: '2 / 2 / 4 / 4' 
-    }
+    {
+      id: "4",
+      title: "Customized Personal Chatbot",
+      subtitle: "Build your own chatbot",
+      content:
+        "Develop personalized AI chatbots tailored to specific needs, offering customizable conversations and responses.",
+      gridArea: "2 / 2 / 4 / 4",
+    },
   ];
-  
+
   return (
     <>
       <div className="flex flex-col overflow-hidden">
@@ -120,9 +133,7 @@ export function HeroScrollDemo() {
             finance concepts in a fun and interactive way.
           </p>
           <a href="/dashboard">
-            <Button className="my-3">
-              Dashboard
-            </Button>
+            <Button className="my-3">Dashboard</Button>
           </a>
         </div>
 
@@ -162,58 +173,64 @@ export function HeroScrollDemo() {
             Learn finance Faster Quicker and Fun!!
           </div>
           <p className="mb-5">
-            Learning is more fun when there is something to remember ... Don&apos;t make learning boring use GrowFolio and excel in your financial wellbeing
+            Learning is more fun when there is something to remember ...
+            Don&apos;t make learning boring use GrowFolio and excel in your
+            financial wellbeing
           </p>
           <div className="relative">
             <ConfettiButton>GrowFolio 🎉</ConfettiButton>
           </div>
-
         </div>
         <div className="relative flex size-full max-w-lg items-center justify-center overflow-hidden rounded-lg bg-background px-20 pb-20 pt-8 ">
           <IconCloud iconSlugs={slugs} />
         </div>
-
       </div>
 
       <div className="w-[80%] container mx-auto p-8">
-      <motion.div 
-        className="grid grid-cols-3 grid-rows-3 gap-4 w-full aspect-[4/3]"
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: { opacity: 0 },
-          visible: {
-            opacity: 1,
-            transition: {
-              staggerChildren: 0.1
-            }
-          }
-        }}
-      >
-        {items.map((item) => (
-          <motion.div
-            key={item.id}
-            layoutId={item.id}
-            onClick={() => setSelectedId(item.id)}
-            className="bg-white rounded-3xl shadow-lg cursor-pointer p-6 flex flex-col justify-between"
-            style={{ gridArea: item.gridArea }}
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 }
-            }}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div>
-              <motion.h3 className="text-2xl font-bold mb-2 text-purple-800">{item.title}</motion.h3>
-              <motion.p className="text-sm text-purple-600">{item.subtitle}</motion.p>
-            </div>
-            <motion.p className="text-purple-700 mt-4">{item.content}</motion.p>
-          </motion.div>
-        ))}
-      </motion.div>
+        <motion.div
+          className="grid grid-cols-3 grid-rows-3 gap-4 w-full aspect-[4/3]"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1,
+              },
+            },
+          }}
+        >
+          {items.map((item) => (
+            <motion.div
+              key={item.id}
+              layoutId={item.id}
+              onClick={() => setSelectedId(item.id)}
+              className="bg-white rounded-3xl shadow-lg cursor-pointer p-6 flex flex-col justify-between"
+              style={{ gridArea: item.gridArea }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div>
+                <motion.h3 className="text-2xl font-bold mb-2 text-purple-800">
+                  {item.title}
+                </motion.h3>
+                <motion.p className="text-sm text-purple-600">
+                  {item.subtitle}
+                </motion.p>
+              </div>
+              <motion.p className="text-purple-700 mt-4">
+                {item.content}
+              </motion.p>
+            </motion.div>
+          ))}
+        </motion.div>
 
-      {/* <AnimatePresence>
+        {/* <AnimatePresence>
         {selectedId && (
           <motion.div 
             className="fixed inset-0 bg-purple-900/80 backdrop-blur-sm z-50 flex items-center justify-center"
@@ -242,38 +259,45 @@ export function HeroScrollDemo() {
           </motion.div>
         )}
       </AnimatePresence> */}
-      <AnimatePresence>
-  {selectedId && (
-    <motion.div 
-      className="fixed inset-0 bg-purple-900/80 backdrop-blur-sm z-50 flex items-center justify-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={() => setSelectedId(null)}  // Close on background click
-    >
-      <motion.div
-        layoutId={selectedId}
-        className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-xl"
-        onClick={(e) => e.stopPropagation()}  // Prevent closing when clicking inside the modal
-      >
-        {items.filter(item => item.id === selectedId).map(item => (
-          <div className="relative" key={item.id}>
-            <motion.h2 className="text-3xl font-bold mb-4 text-purple-800">{item.title}</motion.h2>
-            <motion.p className="text-lg mb-4 text-purple-600">{item.subtitle}</motion.p>
-            <motion.p className="text-base text-purple-700">{item.content}</motion.p>
-            <motion.button
-              onClick={() => setSelectedId(null)}
-              className="absolute top-0 right-0 px-4 py-2 text-purple-600 rounded-md transition-colors"
+        <AnimatePresence>
+          {selectedId && (
+            <motion.div
+              className="fixed inset-0 bg-purple-900/80 backdrop-blur-sm z-50 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedId(null)} // Close on background click
             >
-              <X/>
-            </motion.button>
-          </div>
-        ))}
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
-
+              <motion.div
+                layoutId={selectedId}
+                className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-xl"
+                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+              >
+                {items
+                  .filter((item) => item.id === selectedId)
+                  .map((item) => (
+                    <div className="relative" key={item.id}>
+                      <motion.h2 className="text-3xl font-bold mb-4 text-purple-800">
+                        {item.title}
+                      </motion.h2>
+                      <motion.p className="text-lg mb-4 text-purple-600">
+                        {item.subtitle}
+                      </motion.p>
+                      <motion.p className="text-base text-purple-700">
+                        {item.content}
+                      </motion.p>
+                      <motion.button
+                        onClick={() => setSelectedId(null)}
+                        className="absolute top-0 right-0 px-4 py-2 text-purple-600 rounded-md transition-colors"
+                      >
+                        <X />
+                      </motion.button>
+                    </div>
+                  ))}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );

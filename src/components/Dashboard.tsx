@@ -6,6 +6,7 @@ import {
   Pencil,
   Search,
   TrendingUp,
+  User,
   Workflow,
 } from "lucide-react";
 import {
@@ -88,10 +89,10 @@ const Dashboard = () => {
             Dashboard
           </h2>
           <a
-            href="/edit-details"
+            href="/profile"
             className="rounded-md bg-white p-2 text-black"
           >
-            <Pencil />
+            <User />
           </a>
         </div>
 

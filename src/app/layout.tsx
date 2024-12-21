@@ -9,8 +9,8 @@ import Navbar from "@/components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Edunova 🔥!",
-  description: "Edunova is a platform for creating quizzes, courses, notes and more using AI!",
+  title: "GrowFolio 🔥!",
+  description: "GrowFolio is a platform for developing your portfolio of financial knowledge.",
 };
 
 export default function RootLayout({

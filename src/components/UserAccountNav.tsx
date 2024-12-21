@@ -38,7 +38,12 @@ const UserAccountNav = ({ user }: Props) => {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link className="text-black" href="/">Home</Link>
+          <Link className="text-black" href="/dashboard">Dashboard</Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link className="text-black" target="_blank" href="https://growfolio-chatbot-vercel.app">Chatbot</Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -48,7 +53,7 @@ const UserAccountNav = ({ user }: Props) => {
 
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link className="text-black" href="/create">Create Generator</Link>
+          <Link className="text-black" href="/create">Course Generator</Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
