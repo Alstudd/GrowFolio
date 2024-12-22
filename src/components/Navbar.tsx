@@ -4,9 +4,16 @@ import { ThemeToggle } from "./ThemeToggle";
 import UserAccountNav from "./UserAccountNav";
 import { getAuthSession } from "@/lib/nextauth";
 import SignInButton from "./SignInButton";
+import { prisma } from "@/lib/db";
+import { Coins } from "lucide-react";
 
 const Navbar = async () => {
   const session = await getAuthSession();
+  const userData = await prisma.user.findUnique({
+    where: {
+      id: session?.user.id,
+    },
+  });
 
   return (
     <div>
@@ -19,15 +26,15 @@ const Navbar = async () => {
             {/* <Image
               src="/growfolio-darkmode.png"
               className="rounded-md dark:block hidden"
-              height={25}
-              width={50}
+              height={30}
+              width={60}
               alt="logo"
             /> */}
             <Image
               src="/growfolio-lightmode.png"
               className="rounded-md"
-              height={20}
-              width={40}
+              height={25}
+              width={50}
               alt="logo"
             />
             <div className="py-auto">
@@ -42,6 +49,12 @@ const Navbar = async () => {
           <div>
             <div className="md:mx-8 bg-white dark:bg-black" id="navbar-default">
               <div className="flex items-center gap-5">
+                <div className="flex items-center gap-2">
+                  <Coins className="text-emerald-500" />
+                  <span className="text-black dark:text-white">
+                    <span className="font-semibold">FolioCoins:</span>{" "}{userData?.coins}
+                  </span>
+                </div>
                 <ThemeToggle />
                 {session?.user ? (
                   <UserAccountNav user={session?.user} />
