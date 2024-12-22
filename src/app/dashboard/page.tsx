@@ -1,4 +1,5 @@
 import Dashboard from '@/components/Dashboard'
+import { prisma } from '@/lib/db'
 import { getAuthSession } from '@/lib/nextauth'
 import { redirect } from 'next/navigation'
 
@@ -14,6 +15,13 @@ const page = async (props: Props) => {
   if (!session?.user) {
     return redirect("/")
   }
+  const userData = await prisma.user.findUnique({
+    where: {
+      id: session.user.id
+    }, include: {
+      games: true
+    }
+  })
   return (
     
     <div>
@@ -36,7 +44,7 @@ const page = async (props: Props) => {
           <RecentActivityCard />
         </div>
       </main> */}
-      <Dashboard/>
+      <Dashboard user={session?.user} userData={userData} />
     </div>
   )
 }

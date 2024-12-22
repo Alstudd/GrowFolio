@@ -1,21 +1,15 @@
 "use client";
 import {
+  BarChartIcon,
   BrainCircuit,
   GalleryVerticalEnd,
   History,
-  Pencil,
-  Search,
-  TrendingUp,
   User,
   Workflow,
 } from "lucide-react";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
 import { useState } from "react";
@@ -41,7 +35,7 @@ import {
   XAxis,
 } from "recharts";
 
-const Dashboard = () => {
+const Dashboard = ({ user, userData }: any) => {
   type UserDetails = {
     id: string;
     name: string | null;
@@ -80,7 +74,6 @@ const Dashboard = () => {
     },
   } satisfies ChartConfig;
 
-  const [userAuth, setUserAuth] = useState<UserDetails | null>(null);
   return (
     <div>
       <main className="mx-auto max-w-7xl p-8 pt-10">
@@ -88,12 +81,20 @@ const Dashboard = () => {
           <h2 className="mr-2 text-3xl font-bold tracking-tight dark:text-white text-black">
             Dashboard
           </h2>
+          <div className="flex items-center gap-3">
           <a
-            href="/profile"
+            href="/portfolio"
             className="rounded-md bg-white p-2 text-black"
           >
             <User />
           </a>
+          <a
+            href="/leaderboard"
+            className="rounded-md bg-white p-2 text-black"
+          >
+            <BarChartIcon />
+          </a>
+          </div>
         </div>
 
         <div className="my-5">
@@ -101,7 +102,7 @@ const Dashboard = () => {
             <CardContent className="p-6 flex items-center">
               <div className="flex-shrink-0">
                 <Image
-                  src="/eddieLogo.png"
+                  src={user?.image}
                   width={40}
                   height={40}
                   className="rounded-full"
@@ -110,9 +111,9 @@ const Dashboard = () => {
               </div>
               <div className="mx-5 flex-1">
                 <div className="truncate text-sm font-medium dark:text-white text-gray-500 ">
-                  {userAuth ? (
+                  {user ? (
                     <>
-                      <h1>Welcome, {userAuth.name}</h1>{" "}
+                      <h1>Welcome, {user.name}</h1>{" "}
                     </>
                   ) : (
                     <>
@@ -121,25 +122,31 @@ const Dashboard = () => {
                   )}
                 </div>
                 <div className="truncate text-sm dark:text-white text-gray-500">
-                  {userAuth ? (
+                  {user ? (
                     <>
-                      <h1>User Id : {userAuth.id}</h1>{" "}
+                      <h1>Email : {user.email}</h1>{" "}
                     </>
                   ) : (
                     <>
-                      <h1>User Id : b43yvc22cr12ds5d3 </h1>{" "}
+                      <h1>Email : alstonsoares17@gmail.com </h1>{" "}
                     </>
                   )}
                 </div>
               </div>
-              <div className="inline-flex items-center text-base font-semibold dark:text-white text-gray-500">
+              <div className="inline-flex gap-4 items-center text-base font-semibold dark:text-white text-gray-500">
+              <Image
+                  src="/eddieLogo.png"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                  alt="Image"
+                />
                 <div>
-                  {/* Use the split values inside JSX */}
                   <div>
-                    <h1>Coins</h1>
+                    <h1>FolioCoins</h1>
                   </div>
                   <div className="text-xs font-light">
-                    <h1>0</h1>
+                    <h1>{userData.coins}</h1>
                   </div>
                 </div>
               </div>
@@ -235,7 +242,7 @@ const Dashboard = () => {
             <div className="flex items-center space-x-2.5">
               <div className="flex flex-col">
                 <div className="dark:text-dark-tremor-content-strong font-medium text-tremor-content-strong">
-                  {userAuth?.name ? userAuth?.name : "Alston"}
+                  {user?.name ? user?.name : "Alston"}
                 </div>
                 <span className="dark:text-dark-tremor-content text-sm text-tremor-default text-tremor-content">
                   Today&apos;s Progress
@@ -274,7 +281,7 @@ const Dashboard = () => {
             <div className="flex items-center space-x-5">
               <div className="hidden flex-col md:flex">
                 <span className="dark:text-dark-tremor-content text-tremor-default text-tremor-content">
-                  Videos
+                  Courses
                 </span>
                 <span className="dark:text-dark-tremor-content-strong mx-auto font-medium text-tremor-content-strong">
                   3
@@ -285,7 +292,7 @@ const Dashboard = () => {
                   Quizzes
                 </span>
                 <span className="dark:text-dark-tremor-content-strong mx-auto font-medium text-tremor-content-strong">
-                  5
+                  {userData.games.length}
                 </span>
               </div>
               <span className="rounded bg-emerald-500 px-2 py-1 text-tremor-default font-medium text-white">
