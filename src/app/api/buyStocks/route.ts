@@ -19,7 +19,10 @@ export async function POST(req: Request, res: Response) {
       );
     }
     const body = await req.json();
-    const { stockId, price } = buyStocksSchema.parse(body);
+    let { stockId, price } = buyStocksSchema.parse(body);
+    price = Math.ceil(price);
+    console.log("Stock ID", stockId);
+    console.log("Price", price);
     const stock = await prisma.purchasedStock.findFirst({
       where: {
         stockId: stockId,
@@ -31,6 +34,8 @@ export async function POST(req: Request, res: Response) {
         id: session.user.id,
       },
     });
+    console.log("User", user);
+
     if (!user) {
       return NextResponse.json(
         {
