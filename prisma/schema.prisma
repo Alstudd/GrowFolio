@@ -38,16 +38,17 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  coins         Int       @default(0)
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  games         Game[]
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  coins          Int              @default(0)
+  name           String?
+  email          String?          @unique
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  games          Game[]
   // notes Note[]
+  PurchasedStock PurchasedStock[]
 
   @@map("users")
 }
@@ -161,4 +162,14 @@ model Note {
   // user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("notes")
+}
+
+model PurchasedStock {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @db.ObjectId
+  stockId  String @db.ObjectId
+  quantity Int    @default(0)
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@map("purchasedstocks")
 }
