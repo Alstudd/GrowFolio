@@ -1,4 +1,3 @@
-
 import { prisma } from "@/lib/db";
 import { strict_output } from "@/lib/courseGpt";
 import {
@@ -15,7 +14,7 @@ const bodyParser = z.object({
 
 export async function POST(req: Request, res: Response) {
   try {
-    console.log("hello")
+    console.log("hello");
     const body = await req.json();
     const { chapterId } = bodyParser.parse(body);
     const chapter = await prisma.chapter.findUnique({
@@ -32,9 +31,14 @@ export async function POST(req: Request, res: Response) {
         { status: 404 }
       );
     }
-    console.log(chapter)
+    console.log("Chapters collected:", chapter);
+    console.log("Processing chapter:", chapter.name);
     const videoId = await searchYoutube(chapter.youtubeSearchQuery);
+    console.log("VideoId collected:", videoId);
+    console.log("Processing videoId:", videoId);
     let transcript = await getTranscript(videoId);
+    console.log("Transcript collected:", transcript);
+    console.log("videoId:", videoId);
     let maxLength = 500; // let maxLength = 500; // let maxLength = 200;
     transcript = transcript.split(" ").slice(0, maxLength).join(" ");
     console.log(videoId, transcript);

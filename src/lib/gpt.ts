@@ -1,11 +1,9 @@
-import OpenAI from 'openai';
-
-console.log(process.env.NEXT_OPENAI_API_KEY)
+import OpenAI from "openai";
 
 const apiKey = process.env.NEXT_OPENAI_API_KEY;
 
 if (!apiKey) {
-  throw Error('Missing NEXT_OPENAI_API_KEY')
+  throw Error("Missing NEXT_OPENAI_API_KEY");
 }
 
 const openai = new OpenAI({ apiKey });
@@ -24,116 +22,95 @@ export async function strict_output(
   temperature: number = 1,
   num_tries: number = 3,
   verbose: boolean = false
-): Promise<
-  {
-    question: string;
-    answer: string;
-  }[]
-> {
-  // if the user input is in a list, we also process the output as a list of json
+): Promise<any> {
   const list_input: boolean = Array.isArray(user_prompt);
-  // if the output format contains dynamic elements of < or >, then add to the prompt to handle dynamic elements
   const dynamic_elements: boolean = /<.*?>/.test(JSON.stringify(output_format));
-  // if the output format contains list elements of [ or ], then we add to the prompt to handle lists
   const list_output: boolean = /\[.*?\]/.test(JSON.stringify(output_format));
 
-  // start off with no error message
   let error_msg: string = "";
 
   for (let i = 0; i < num_tries; i++) {
-    let output_format_prompt: string = `\nYou are to output the following in json format: ${JSON.stringify(
-      output_format
-    )}. \nDo not put quotation marks or escape character \\ in the output fields.`;
+    let output_format_prompt: string = `
+You are to output the following in strict json format: ${JSON.stringify(output_format)}. 
+Follow these rules strictly:
+1. Output must be valid JSON that can be parsed by JSON.parse()
+2. Use double quotes (") for strings, not single quotes (')
+3. Do not use any special characters or escape sequences in answers
+4. Ensure all required fields are present
+5. If output is a list, wrap it in square brackets []
+6. Each object should have all the specified fields
+${list_output ? "\nIf output field is a list, classify output into the best element of the list." : ""}
+${dynamic_elements ? "\nReplace any text between < and > with appropriate content" : ""}
+${list_input ? "\nGenerate a list of json objects, one for each input element." : ""}`;
 
-    if (list_output) {
-      output_format_prompt += `\nIf output field is a list, classify output into the best element of the list.`;
-    }
+    let res: string = "";
+    let output: any;
 
-    // if output_format contains dynamic elements, process it accordingly
-    if (dynamic_elements) {
-      output_format_prompt += `\nAny text enclosed by < and > indicates you must generate content to replace it. Example input: Go to <location>, Example output: Go to the garden\nAny output key containing < and > indicates you must generate the key name to replace it. Example input: {'<location>': 'description of location'}, Example output: {school: a place for education}`;
-    }
-
-    // if input is in a list format, ask it to generate json in a list
-    if (list_input) {
-      output_format_prompt += `\nGenerate a list of json, one json for each input element.`;
-    }
-
-    // Use OpenAI to get a response
-    const response = await openai.chat.completions.create({
-      temperature: temperature,
-      model: model,
-      messages: [
-        {
-          role: "system",
-          content: system_prompt + output_format_prompt + error_msg,
-        },
-        { role: "user", content: user_prompt.toString() },
-      ],
-    });
-
-    let res: string =
-      response.choices[0].message?.content?.replace(/'/g, '"') ?? "";
-
-    // ensure that we don't replace away apostrophes in text
-    res = res.replace(/(\w)"(\w)/g, "$1'$2");
-
-    if (verbose) {
-      console.log(
-        "System prompt:",
-        system_prompt + output_format_prompt + error_msg
-      );
-      console.log("\nUser prompt:", user_prompt);
-      console.log("\nGPT response:", res);
-    }
-
-    // try-catch block to ensure output format is adhered to
     try {
-      let output: any = JSON.parse(res);
+      const response = await openai.chat.completions.create({
+        temperature,
+        model,
+        messages: [
+          {
+            role: "system",
+            content: system_prompt + output_format_prompt + error_msg,
+          },
+          { role: "user", content: user_prompt.toString() },
+        ],
+      });
 
-      if (list_input) {
-        if (!Array.isArray(output)) {
-          throw new Error("Output format not in a list of json");
-        }
-      } else {
+      res = response.choices[0].message?.content?.trim() ?? "";
+
+      // Clean up the response to ensure valid JSON
+      res = res.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
+      res = res.replace(/\n/g, " ").replace(/\r/g, " ");
+
+      // If response doesn't start with [ for array or { for object, wrap it
+      if (list_input && !res.startsWith("[")) {
+        res = `[${res}]`;
+      }
+
+      output = JSON.parse(res);
+
+      if (list_input && !Array.isArray(output)) {
         output = [output];
       }
 
-      // check for each element in the output_list, the format is correctly adhered to
-      for (let index = 0; index < output.length; index++) {
+      // Validate output format
+      for (
+        let index = 0;
+        index < (Array.isArray(output) ? output.length : 1);
+        index++
+      ) {
+        const current = Array.isArray(output) ? output[index] : output;
+
         for (const key in output_format) {
-          // unable to ensure accuracy of dynamic output header, so skip it
-          if (/<.*?>/.test(key)) {
-            continue;
+          if (/<.*?>/.test(key)) continue;
+
+          if (!(key in current)) {
+            throw new Error(`Missing required field: ${key}`);
           }
 
-          // if output field missing, raise an error
-          if (!(key in output[index])) {
-            throw new Error(`${key} not in json output`);
-          }
-
-          // check that one of the choices given for the list of words is an unknown
           if (Array.isArray(output_format[key])) {
             const choices = output_format[key] as string[];
-            // ensure output is not a list
-            if (Array.isArray(output[index][key])) {
-              output[index][key] = output[index][key][0];
+            let value = current[key];
+
+            if (Array.isArray(value)) {
+              value = value[0];
             }
-            // output the default category (if any) if GPT is unable to identify the category
-            if (!choices.includes(output[index][key]) && default_category) {
-              output[index][key] = default_category;
+
+            if (!choices.includes(value) && default_category) {
+              current[key] = default_category;
             }
-            // if the output is a description format, get only the label
-            if (output[index][key].includes(":")) {
-              output[index][key] = output[index][key].split(":")[0];
+
+            if (typeof value === "string" && value.includes(":")) {
+              current[key] = value.split(":")[0];
             }
           }
         }
 
-        // if we just want the values for the outputs
         if (output_value_only) {
-          output[index] = Object.values(output[index]);
-          // just output without the list if there is only one element
+          output[index] = Object.values(current);
           if (output[index].length === 1) {
             output[index] = output[index][0];
           }
@@ -142,11 +119,19 @@ export async function strict_output(
 
       return list_input ? output : output[0];
     } catch (e) {
-      error_msg = `\n\nResult: ${res}\n\nError message: ${e}`;
-      console.log("An exception occurred:", e);
-      console.log("Current invalid json format:", res);
+      error_msg = `\n\nPrevious error: ${e}\nPlease fix the JSON format and try again.`;
+      console.error("Attempt", i + 1, "failed:", e);
+      if (verbose) {
+        console.log("Current invalid json format:", res);
+      }
+
+      if (i === num_tries - 1) {
+        throw new Error(
+          `Failed after ${num_tries} attempts: ${e}\nLast response: ${res}`
+        );
+      }
     }
   }
 
-  return [];
+  throw new Error("Failed to generate valid output");
 }
