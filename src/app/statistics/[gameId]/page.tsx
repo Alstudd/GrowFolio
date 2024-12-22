@@ -18,6 +18,7 @@ type Props = {
 };
 
 const Statistics = async ({ params: { gameId } }: Props) => {
+  console;
   const session = await getAuthSession();
   if (!session?.user) {
     return redirect("/");

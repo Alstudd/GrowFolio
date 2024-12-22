@@ -37,7 +37,7 @@ const extractStocks = async (req, res) => {
         const stockName = $("div.zzDege").text().trim();
 
         return res.json({
-          stockSymbol: matchingStock,
+          stockSymbol: matchingStock.replace(":NSE", ""), // Remove :NSE
           stockName,
           stockPrice,
         });
@@ -49,9 +49,9 @@ const extractStocks = async (req, res) => {
       }
     }
 
-    // Calculate the starting index for pagination (first 9 stocks for page 1)
-    const startIndex = (page - 1) * 9;
-    const endIndex = startIndex + 9;
+    // Calculate the starting index for pagination (first 12 stocks for page 1)
+    const startIndex = (page - 1) * 12;
+    const endIndex = startIndex + 12;
 
     // Slice the stocks array to get only the appropriate range
     const selectedStocks = stocks.slice(startIndex, endIndex);
@@ -71,14 +71,14 @@ const extractStocks = async (req, res) => {
         const stockName = $("div.zzDege").text().trim();
 
         results.push({
-          stockSymbol: stock,
+          stockSymbol: stock.replace(":NSE", ""), // Remove :NSE
           stockName,
           stockPrice,
         });
       } catch (err) {
         console.error(`Error fetching data for ${stock}: ${err.message}`);
         results.push({
-          stockSymbol: stock,
+          stockSymbol: stock.replace(":NSE", ""), // Remove :NSE even in case of error
           error: `Failed to fetch data`,
         });
       }
