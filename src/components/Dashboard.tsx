@@ -7,10 +7,7 @@ import {
   User,
   Workflow,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useState } from "react";
 import {
@@ -82,18 +79,15 @@ const Dashboard = ({ user, userData }: any) => {
             Dashboard
           </h2>
           <div className="flex items-center gap-3">
-          <a
-            href="/portfolio"
-            className="rounded-md bg-white p-2 text-black"
-          >
-            <User />
-          </a>
-          <a
-            href="/leaderboard"
-            className="rounded-md bg-white p-2 text-black"
-          >
-            <BarChartIcon />
-          </a>
+            <a href="/portfolio" className="rounded-md bg-white p-2 text-black">
+              <User />
+            </a>
+            <a
+              href="/leaderboard"
+              className="rounded-md bg-white p-2 text-black"
+            >
+              <BarChartIcon />
+            </a>
           </div>
         </div>
 
@@ -134,7 +128,7 @@ const Dashboard = ({ user, userData }: any) => {
                 </div>
               </div>
               <div className="inline-flex gap-4 items-center text-base font-semibold dark:text-white text-gray-500">
-              <Image
+                <Image
                   src="/eddieLogo.png"
                   width={40}
                   height={40}
@@ -154,59 +148,62 @@ const Dashboard = ({ user, userData }: any) => {
           </Card>
         </div>
 
-        {/* Course Gen  */}
-        <div className=" grid gap-4 md:grid-cols-2">
-          <a href="/create">
+        {/* Quiz Gen  */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <a href="/quiz" className="md:col-span-3">
             <Card>
               <CardContent className="p-4">
-                <div className="flex justify-between gap-3 md:gap-10">
-                  <div className="my-auto">
-                    <h1 className="text-lg font-bold md:text-xl">
-                      Course Generator
-                    </h1>
-                    <p className="md:text-md text-sm">
-                      Learn the best way by creating your own course
-                    </p>
-                  </div>
+                <div className="flex justify-between gap-3">
                   <Image
-                    src="/eddieSmile.png"
+                    src="/eddieNGamer.png"
                     width={80}
                     height={80}
+                    className="my-auto"
                     alt="Eddie"
                   />
+
+                  <div className="leading-1.5 hidden w-full max-w-[360px] flex-col rounded-e-xl rounded-es-xl border-gray-200 bg-gray-100 p-4 md:block">
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <span className="text-sm font-semibold text-gray-900 ">
+                        Mr. Folio, Your Assistant
+                      </span>
+                      <span className="text-sm font-normal text-gray-500">
+                        Now
+                      </span>
+                    </div>
+                    <p className="py-2.5 text-sm font-normal text-gray-900 ">
+                      Practice makes you Perfect, Come On!! Let&apos;s learn
+                      together{" "}
+                      <span className="font-bold">&quot;Start Now&quot;!</span>
+                    </p>
+                  </div>
+
+                  <div className="my-auto md:mr-10">
+                    <h1 className="text-lg font-bold md:text-xl">
+                      Quiz Generator
+                    </h1>
+                    <p className="md:text-md text-sm">
+                      Test your knowledge, practice well and revise by using the
+                      Quiz generator to make a quiz with single word prompts
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </a>
-          <div className="grid grid-cols-2 gap-4">
-            <a href="/gallery">
-              <Card className="h-full w-full">
-                <CardContent className="p-4 flex flex-col items-center justify-center">
-                  <div className="flex w-full justify-between">
-                    <h1 className="text-lg font-bold md:text-xl">Gallery</h1>
-                    <GalleryVerticalEnd size={20} />
-                  </div>
-                  <p className="md:text-md text-sm">
-                    Check out all the courses you generated
-                  </p>
-                </CardContent>
-              </Card>
-            </a>
-            <a href="/brainstorm">
-              <Card className="h-full w-full">
-                <CardContent className="p-4 flex flex-col items-center justify-center">
-                  <div className="flex w-full justify-between">
-                    <h1 className="text-lg font-bold md:text-xl">Brainstorm</h1>
-                    <Workflow size={20} />
-                  </div>
-                  <p className="md:text-md text-sm">
-                    Create a mindmap to learn more effectively. Visual learning
-                    is always better than oral learning
-                  </p>
-                </CardContent>
-              </Card>
-            </a>
-          </div>
+          <a href="/history">
+            <Card className="h-full w-full">
+              <CardContent className="flex p-4 flex-col items-center justify-center">
+                <div className="flex w-full justify-between">
+                  <h1 className="text-lg font-bold md:text-xl">Quiz History</h1>
+                  <History size={20} />
+                </div>
+                <p className="md:text-md text-sm">
+                  Check out all the quizzes you attempted
+                </p>
+              </CardContent>
+            </Card>
+          </a>
         </div>
 
         {/* Streaks  */}
@@ -223,16 +220,15 @@ const Dashboard = ({ user, userData }: any) => {
             />
             <h3 className="my-auto text-3xl text-center font-semibold">3</h3>
           </Card>
-          <a href="/brainstorm">
+          <a href="/stockSimulation">
             <Card className="h-full w-full">
               <CardContent className="p-4 flex flex-col items-center justify-center">
                 <div className="flex w-full justify-between">
-                  <h1 className="text-lg font-bold md:text-xl">Doubt Forum</h1>
+                  <h1 className="text-lg font-bold md:text-xl">Stock Simulation</h1>
                   <BrainCircuit size={20} />
                 </div>
                 <p className="md:text-md text-sm">
-                  Ask doubts that help you have and learn in depth with Expert
-                  volunteers in the finance field who solve doubts
+                  Learn how to invest in stocks and manage your portfolio through a fun and interactive simulation
                 </p>
               </CardContent>
             </Card>
@@ -284,7 +280,7 @@ const Dashboard = ({ user, userData }: any) => {
                   Courses
                 </span>
                 <span className="dark:text-dark-tremor-content-strong mx-auto font-medium text-tremor-content-strong">
-                  3
+                  15
                 </span>
               </div>
               <div className="hidden flex-col md:flex">
@@ -302,62 +298,58 @@ const Dashboard = ({ user, userData }: any) => {
           </Card>
         </div>
 
-        {/* Quiz Gen  */}
-        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-4">
-          <a href="/history">
-            <Card className="h-full w-full">
-              <CardContent className="flex p-4 flex-col items-center justify-center">
-                <div className="flex w-full justify-between">
-                  <h1 className="text-lg font-bold md:text-xl">Quiz History</h1>
-                  <History size={20} />
-                </div>
-                <p className="md:text-md text-sm">
-                  Check out all the quizzes you attempted
-                </p>
-              </CardContent>
-            </Card>
-          </a>
-          <a href="/quiz" className="md:col-span-3">
+        {/* Course Gen  */}
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <a href="/create">
             <Card>
               <CardContent className="p-4">
-                <div className="flex justify-between gap-3">
-                  <Image
-                    src="/eddieNGamer.png"
-                    width={80}
-                    height={80}
-                    className="my-auto"
-                    alt="Eddie"
-                  />
-
-                  <div className="leading-1.5 hidden w-full max-w-[360px] flex-col rounded-e-xl rounded-es-xl border-gray-200 bg-gray-100 p-4 md:block">
-                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                      <span className="text-sm font-semibold text-gray-900 ">
-                        Mr. Folio, Your Assistant
-                      </span>
-                      <span className="text-sm font-normal text-gray-500">
-                        Now
-                      </span>
-                    </div>
-                    <p className="py-2.5 text-sm font-normal text-gray-900 ">
-                      Practice makes you Perfect, Come On!! Let&apos;s learn
-                      together{" "}
-                      <span className="font-bold">&quot;Start Now&quot;!</span>
-                    </p>
-                  </div>
-
-                  <div className="my-auto md:mr-10">
+                <div className="flex justify-between gap-3 md:gap-10">
+                  <div className="my-auto">
                     <h1 className="text-lg font-bold md:text-xl">
-                      Quiz Generator
+                      Course Generator
                     </h1>
                     <p className="md:text-md text-sm">
-                      Test your knowledge, practice well and revise by using the
-                      Quiz generator to make a quiz with single word prompts
+                      Learn the best way by creating your own course
                     </p>
                   </div>
+                  <Image
+                    src="/eddieSmile.png"
+                    width={80}
+                    height={80}
+                    alt="Eddie"
+                  />
                 </div>
               </CardContent>
             </Card>
           </a>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="/gallery">
+              <Card className="h-full w-full">
+                <CardContent className="p-4 flex flex-col items-center justify-center">
+                  <div className="flex w-full justify-between">
+                    <h1 className="text-lg font-bold md:text-xl">Gallery</h1>
+                    <GalleryVerticalEnd size={20} />
+                  </div>
+                  <p className="md:text-md text-sm">
+                    Check out all the courses you generated
+                  </p>
+                </CardContent>
+              </Card>
+            </a>
+            <a target="_blank" href="http://localhost:5173">
+              <Card className="h-full w-full">
+                <CardContent className="p-4 flex flex-col items-center justify-center">
+                  <div className="flex w-full justify-between">
+                    <h1 className="text-lg font-bold md:text-xl">Budgeting</h1>
+                    <Workflow size={20} />
+                  </div>
+                  <p className="md:text-md text-sm">
+                    Learn how to manage your finance and budgeting through GrowFlow's Budget Simulation
+                  </p>
+                </CardContent>
+              </Card>
+            </a>
+          </div>
         </div>
 
         {/* Recent Performance  */}

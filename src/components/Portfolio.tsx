@@ -13,6 +13,27 @@ const Portfolio = ({ user }: any) => {
     fetchPortfolioData();
   }, []);
 
+  const handleSell = async (stockId: string, price: string) => {
+    console.log("Selling stock:", stockId, price);
+    const pricewithoutruppee = parseInt(price.slice(1));
+    console.log(pricewithoutruppee);
+    try {
+      const response = await fetch("/api/sellStocks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          stockId,
+          price: pricewithoutruppee,
+        }),
+      });
+      console.log(response);
+    } catch (err) {
+      console.error("Error selling stock:", err);
+    }
+  }
+
   if (!portfolioData) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -61,6 +82,14 @@ const Portfolio = ({ user }: any) => {
                   <td className="py-2 px-4">{index + 1}</td>
                   <td className="py-2 px-4">{stock.stockId}</td>
                   <td className="py-2 px-4">{stock.quantity}</td>
+                  <td className="py-2 px-4"><button
+                    onClick={() =>
+                      handleSell(stock.stockId, stock.price)
+                    }
+                    className="w-full py-2 px-4 rounded-lg text-white bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 font-medium transition duration-300"
+                  >
+                    SELL
+                  </button></td>
                 </tr>
               ))}
             </tbody>
