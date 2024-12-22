@@ -26,8 +26,8 @@ const Navbar = async () => {
             <Image
               src="/growfolio-lightmode.png"
               className="rounded-md"
-              height={25}
-              width={50}
+              height={20}
+              width={40}
               alt="logo"
             />
             <div className="py-auto">
