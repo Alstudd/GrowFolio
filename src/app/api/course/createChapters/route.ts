@@ -56,6 +56,8 @@ export async function POST(req: Request, res: Response) {
       output_units = [defaultUnit];
     }
 
+    console.log("Logging the output units:", output_units);
+
     // Ensure output_units is always an array with valid structure
     output_units = output_units.filter(
       (unit) => unit && unit.title && Array.isArray(unit.chapters)

@@ -31,14 +31,17 @@ export async function strict_output(
   for (let i = 0; i < num_tries; i++) {
     let output_format_prompt: string = `
 You are to output ${list_output ? "an array of objects in" : ""} the following format:
-${JSON.stringify(output_format, null, 2)}
-
+${JSON.stringify(output_format, null, 2)}.
+Follow these rules strictly:
 IMPORTANT: Your response must be valid JSON. Ensure all strings are properly quoted.
 - Every property name must be in double quotes
-- Every string value must be in double quotes
-- Use proper JSON syntax with commas between properties
-- Arrays must be properly formatted with square brackets
+- Use double quotes (") for strings, not single quotes (')
+- Use proper JSON syntax with commas (,) between properties
+- Arrays must be properly formatted with square brackets []. Do not use any other brackets.
+- Do not use any special characters or escape sequences
 - Do not include any explanatory text outside the JSON structure
+- Output must be valid JSON that can be parsed by JSON.parse()
+- Ensure all required fields are present
 
 Example of correct formatting:
 {
@@ -77,6 +80,7 @@ Example of correct formatting:
 
     const res: string = response.choices[0].message?.content?.trim() ?? "";
 
+    console.log("Response from GPT", res);
     if (verbose) {
       console.log(
         "System prompt:",

@@ -25,12 +25,10 @@ const HistoryComponent = async ({ limit, userId }: Props) => {
         return (
           <Link
             className="w-full text-base font-medium leading-none"
-            href={`/statistic/${game.id}`}
+            href={`/statistics/${game.id}`}
             key={game.id}
           >
-            <div
-              className="group rounded-md bg-white dark:bg-black w-full flex items-center justify-between"
-            >
+            <div className="group rounded-md bg-white dark:bg-black w-full flex items-center justify-between">
               <div className="group-hover:bg-gray-100 dark:group-hover:bg-gray-700 w-full p-3 rounded-md flex items-center">
                 {game.gameType === "mcq" ? (
                   <CopyCheck className="mr-3" />
