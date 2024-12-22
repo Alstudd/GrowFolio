@@ -6,11 +6,19 @@ import { NextResponse } from "next/server";
 const combineStocksValuation = async (stocksData: any) => {
   let totalValuation = 0;
   for (const stock of stocksData) {
+    console.log(stock);
+
     const stockName = stock.stockId;
+    console.log("StockQuantity:", stock.quantity);
+    console.log("Stock complete name:", stockName);
     const stockCurrentFetch = await axios.get(
       `http://localhost:3001/stocks?stockName=${stockName}`
     );
-    const stockPrice = stockCurrentFetch.data.stockPrice;
+
+    console.log("stock Price", stockCurrentFetch.data);
+    console.log("Compleete the process till here");
+    const stockPrice = stockCurrentFetch.data.stockPrice.slice(1);
+    console.log("StockPriceComplete", stockPrice);
     totalValuation += stockPrice * stock.quantity;
     totalValuation = Math.ceil(totalValuation);
   }
@@ -36,15 +44,25 @@ export async function GET(req: Request, res: Response) {
         PurchasedStock: true,
       },
     });
+
+    console.log("User", user);
     const stocksData: any = user?.PurchasedStock.map((stock) => {
       return {
         stockId: stock.stockId,
         quantity: stock.quantity,
       };
     });
+    console.log("Stocks COmplete:", stocksData);
+
     if (stocksData?.length > 0) {
       const totalStocksValuation = await combineStocksValuation(stocksData);
       const usercoins = user?.coins ?? 0;
+      console.log("Logging the main data:", {
+        totalStocksValuation,
+        stocksData,
+      });
+      const valuation = totalStocksValuation + usercoins;
+      console.log("Valuation complete:", valuation);
       return NextResponse.json({
         totalStocksValuation,
         stocksData: stocksData,

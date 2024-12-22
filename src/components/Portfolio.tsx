@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const Portfolio = ({ user }: any) => {
@@ -6,8 +7,8 @@ const Portfolio = ({ user }: any) => {
 
   useEffect(() => {
     const fetchPortfolioData = async () => {
-      const response = await fetch("/api/portfolio");
-      const data = await response.json();
+      const response = await axios.get("/api/portfolio");
+      const data = await response.data;
       setPortfolioData(data);
     };
     fetchPortfolioData();
@@ -15,7 +16,16 @@ const Portfolio = ({ user }: any) => {
 
   const handleSell = async (stockId: string, price: string) => {
     console.log("Selling stock:", stockId, price);
-    const pricewithoutruppee = parseInt(price.slice(1));
+    // const pricewithoutruppee = parseInt(price.slice(1));
+    // console.log(pricewithoutruppee);
+    const priceOfStock = await axios.get(
+      `http://localhost:3001/stocks?stockName=${stockId}`
+    );
+    console.log(priceOfStock.data);
+    const pricewithRuppee = priceOfStock.data.stockPrice;
+    let pricewithoutruppee = pricewithRuppee.slice(1);
+    console.log(pricewithoutruppee);
+    pricewithoutruppee = Math.round(pricewithoutruppee);
     console.log(pricewithoutruppee);
     try {
       const response = await fetch("/api/sellStocks", {
@@ -32,7 +42,7 @@ const Portfolio = ({ user }: any) => {
     } catch (err) {
       console.error("Error selling stock:", err);
     }
-  }
+  };
 
   if (!portfolioData) {
     return (
@@ -75,22 +85,24 @@ const Portfolio = ({ user }: any) => {
             </thead>
             <tbody>
               {portfolioData.stocksData.map((stock: any, index: number) => (
-                <tr
+                stock.quantity > 0 && (
+                  <tr
                   key={index}
                   className="border-b border-gray-300 dark:border-green-700"
                 >
                   <td className="py-2 px-4">{index + 1}</td>
                   <td className="py-2 px-4">{stock.stockId}</td>
                   <td className="py-2 px-4">{stock.quantity}</td>
-                  <td className="py-2 px-4"><button
-                    onClick={() =>
-                      handleSell(stock.stockId, stock.price)
-                    }
-                    className="w-full py-2 px-4 rounded-lg text-white bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 font-medium transition duration-300"
-                  >
-                    SELL
-                  </button></td>
+                  <td className="py-2 px-4">
+                    <button
+                      onClick={() => handleSell(stock.stockId, stock.quantity)}
+                      className="w-full py-2 px-4 rounded-lg text-white bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 font-medium transition duration-300"
+                    >
+                      SELL
+                    </button>
+                  </td>
                 </tr>
+                )
               ))}
             </tbody>
           </table>

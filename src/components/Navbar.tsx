@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { ThemeToggle } from "./ThemeToggle";
 import UserAccountNav from "./UserAccountNav";
@@ -9,11 +9,15 @@ import { Coins } from "lucide-react";
 
 const Navbar = async () => {
   const session = await getAuthSession();
-  const userData = await prisma.user.findUnique({
-    where: {
-      id: session?.user.id,
-    },
-  });
+
+  // Fetch user data only if session exists
+  const userData = session?.user?.id
+    ? await prisma.user.findUnique({
+        where: {
+          id: session.user.id,
+        },
+      })
+    : null;
 
   return (
     <div>
@@ -23,13 +27,6 @@ const Navbar = async () => {
             href="/"
             className="flex items-center space-x-3 text-white rtl:space-x-reverse"
           >
-            {/* <Image
-              src="/growfolio-darkmode.png"
-              className="rounded-md dark:block hidden"
-              height={30}
-              width={60}
-              alt="logo"
-            /> */}
             <Image
               src="/growfolio-lightmode.png"
               className="rounded-md"
@@ -49,15 +46,18 @@ const Navbar = async () => {
           <div>
             <div className="md:mx-8 bg-white dark:bg-black" id="navbar-default">
               <div className="flex items-center gap-5">
-                <div className="flex items-center gap-2">
-                  <Coins className="text-emerald-500" />
-                  <span className="text-black dark:text-white">
-                    <span className="font-semibold">FolioCoins:</span>{" "}{userData?.coins}
-                  </span>
-                </div>
+                {session?.user && (
+                  <div className="flex items-center gap-2">
+                    <Coins className="text-emerald-500" />
+                    <span className="text-black dark:text-white">
+                      <span className="font-semibold">FolioCoins:</span>{" "}
+                      {userData?.coins || 0}
+                    </span>
+                  </div>
+                )}
                 <ThemeToggle />
                 {session?.user ? (
-                  <UserAccountNav user={session?.user} />
+                  <UserAccountNav user={session.user} />
                 ) : (
                   <SignInButton text={"Sign In"} />
                 )}
