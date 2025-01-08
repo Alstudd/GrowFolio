@@ -344,7 +344,7 @@ const Dashboard = ({ user, userData }: any) => {
                     <Workflow size={20} />
                   </div>
                   <p className="md:text-md text-sm">
-                    Learn how to manage your finance and budgeting through GrowFlow's Budget Simulation
+                    Learn how to manage your finance and budgeting through GrowFlow&apos;s Budget Simulation
                   </p>
                 </CardContent>
               </Card>
