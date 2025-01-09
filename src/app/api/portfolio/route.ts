@@ -12,7 +12,7 @@ const combineStocksValuation = async (stocksData: any) => {
     console.log("StockQuantity:", stock.quantity);
     console.log("Stock complete name:", stockName);
     const stockCurrentFetch = await axios.get(
-      `http://localhost:3001/stocks?stockName=${stockName}`
+      `${process.env.NEXT_BACKEND_URL}/stocks?stockName=${stockName}`
     );
 
     console.log("stock Price", stockCurrentFetch.data);

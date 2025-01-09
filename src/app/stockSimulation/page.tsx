@@ -42,7 +42,7 @@ const Page = () => {
       try {
         setLoading(true);
         const response = await axios.get<ApiResponse>(
-          `http://localhost:3001/stocks?page=${currentPage}`
+          `${process.env.NEXT_BACKEND_URL}/stocks?page=${currentPage}`
         );
         setStocksData(response.data.stocks);
         // Assuming the API returns total pages, adjust this based on your API
