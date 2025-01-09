@@ -19,7 +19,7 @@ const Portfolio = ({ user }: any) => {
     // const pricewithoutruppee = parseInt(price.slice(1));
     // console.log(pricewithoutruppee);
     const priceOfStock = await axios.get(
-      `${process.env.NEXT_BACKEND_URL}/stocks?stockName=${stockId}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/stocks?stockName=${stockId}`
     );
     console.log(priceOfStock.data);
     const pricewithRuppee = priceOfStock.data.stockPrice;
