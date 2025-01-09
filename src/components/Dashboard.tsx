@@ -336,7 +336,7 @@ const Dashboard = ({ user, userData }: any) => {
                 </CardContent>
               </Card>
             </a>
-            <a target="_blank" href="http://localhost:5173">
+            <a target="_blank" href="https://grow-folio-budget-simulation.vercel.app">
               <Card className="h-full w-full">
                 <CardContent className="p-4 flex flex-col items-center justify-center">
                   <div className="flex w-full justify-between">
