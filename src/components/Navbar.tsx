@@ -21,7 +21,7 @@ const Navbar = async () => {
 
   return (
     <div>
-      <nav className="md:block text-black dark:text-white hidden bg-white dark:bg-black">
+      <nav className="text-black dark:text-white bg-white dark:bg-black">
         <div className="z-[30] md:mx-10 mx-2 flex flex-wrap items-center justify-between p-2">
           <a
             href="/"

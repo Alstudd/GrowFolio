@@ -167,7 +167,7 @@ export function HeroScrollDemo() {
           </div>
         </div>
       </div>
-      <div className="w-[80%] mx-auto flex gap-10">
+      <div className="w-[80%] mx-auto grid gap-10 md:grid-cols-2 md:pt-0 pt-10">
         <div className="my-auto">
           <div className="md:text-4xl text-3xl font-bold mb-3">
             Learn finance Faster Quicker and Fun!!
@@ -181,123 +181,9 @@ export function HeroScrollDemo() {
             <ConfettiButton>GrowFolio 🎉</ConfettiButton>
           </div>
         </div>
-        <div className="relative flex size-full max-w-lg items-center justify-center overflow-hidden rounded-lg bg-background px-20 pb-20 pt-8 ">
+        <div className="relative flex size-full max-w-lg items-center justify-center overflow-hidden rounded-lg dark:bg-black bg-white md:px-10 px-0 md:pt-8 pt-0 pb-20">
           <IconCloud iconSlugs={slugs} />
         </div>
-      </div>
-
-      <div className="w-[80%] container mx-auto p-8">
-        <motion.div
-          className="grid grid-cols-3 grid-rows-3 gap-4 w-full aspect-[4/3]"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.1,
-              },
-            },
-          }}
-        >
-          {items.map((item) => (
-            <motion.div
-              key={item.id}
-              layoutId={item.id}
-              onClick={() => setSelectedId(item.id)}
-              className="bg-white rounded-3xl shadow-lg cursor-pointer p-6 flex flex-col justify-between"
-              style={{ gridArea: item.gridArea }}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div>
-                <motion.h3 className="text-2xl font-bold mb-2 text-purple-800">
-                  {item.title}
-                </motion.h3>
-                <motion.p className="text-sm text-purple-600">
-                  {item.subtitle}
-                </motion.p>
-              </div>
-              <motion.p className="text-purple-700 mt-4">
-                {item.content}
-              </motion.p>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* <AnimatePresence>
-        {selectedId && (
-          <motion.div 
-            className="fixed inset-0 bg-purple-900/80 backdrop-blur-sm z-50 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              layoutId={selectedId}
-              className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-xl"
-            >
-              {items.filter(item => item.id === selectedId).map(item => (
-                <div key={item.id}>
-                  <motion.h2 className="text-3xl font-bold mb-4 text-purple-800">{item.title}</motion.h2>
-                  <motion.p className="text-lg mb-4 text-purple-600">{item.subtitle}</motion.p>
-                  <motion.p className="text-base text-purple-700">{item.content}</motion.p>
-                  <motion.button
-                    onClick={() => setSelectedId(null)}
-                    className="mt-6 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
-                  >
-                    Close
-                  </motion.button>
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence> */}
-        <AnimatePresence>
-          {selectedId && (
-            <motion.div
-              className="fixed inset-0 bg-purple-900/80 backdrop-blur-sm z-50 flex items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedId(null)} // Close on background click
-            >
-              <motion.div
-                layoutId={selectedId}
-                className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-xl"
-                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
-              >
-                {items
-                  .filter((item) => item.id === selectedId)
-                  .map((item) => (
-                    <div className="relative" key={item.id}>
-                      <motion.h2 className="text-3xl font-bold mb-4 text-purple-800">
-                        {item.title}
-                      </motion.h2>
-                      <motion.p className="text-lg mb-4 text-purple-600">
-                        {item.subtitle}
-                      </motion.p>
-                      <motion.p className="text-base text-purple-700">
-                        {item.content}
-                      </motion.p>
-                      <motion.button
-                        onClick={() => setSelectedId(null)}
-                        className="absolute top-0 right-0 px-4 py-2 text-purple-600 rounded-md transition-colors"
-                      >
-                        <X />
-                      </motion.button>
-                    </div>
-                  ))}
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </>
   );
